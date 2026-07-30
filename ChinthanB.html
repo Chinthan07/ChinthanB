@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinthan B — Cybersecurity Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0E11;
+    --panel: #10151B;
+    --panel-2: #141A21;
+    --line: #212933;
+    --text: #E7EBEF;
+    --text-dim: #8A97A6;
+    --teal: #4FD1C5;
+    --teal-dim: #2E5F5A;
+    --alert: #E2574C;
+    --alert-dim: #5E2E2A;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.55;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    background-attachment: fixed;
+  }
+
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- STATUS BAR ---------- */
+  .statusbar{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(11,14,17,0.88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .statusbar .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 24px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
+  .statusbar .brand{ color: var(--text); font-weight:600; letter-spacing:0.02em; }
+  .statusbar .dot{ display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--teal); margin-right:7px; box-shadow:0 0 6px var(--teal); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+  .statusbar nav{ display:flex; gap:22px; }
+  .statusbar nav a{ color: var(--text-dim); }
+  .statusbar nav a:hover{ color: var(--teal); text-decoration:none; }
+  @media (max-width: 640px){ .statusbar nav{ display:none; } }
+
+  /* ---------- HERO / TERMINAL ---------- */
+  .hero{ padding: 64px 0 40px; }
+  .terminal{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  .terminal-head{
+    display:flex; align-items:center; gap:8px;
+    padding: 10px 14px;
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .tdot{ width:10px; height:10px; border-radius:50%; background:#3a4450; }
+  .terminal-body{
+    padding: 22px 24px 26px;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    color: var(--text-dim);
+    min-height: 168px;
+  }
+  .terminal-body .line{ margin: 0 0 4px; white-space: pre-wrap; }
+  .terminal-body .ok{ color: var(--teal); }
+  .terminal-body .name{ color: var(--text); font-size: 15px; }
+  .caret{ display:inline-block; width:8px; height:15px; background:var(--teal); vertical-align:-2px; animation: blink 1s step-end infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero-role{
+    margin-top: 26px;
+    display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:14px;
+  }
+  .hero-role h1{
+    font-family: var(--sans); font-weight:800; font-size: clamp(30px, 5vw, 46px);
+    margin:0; letter-spacing:-0.02em; line-height:1.05;
+  }
+  .hero-role .sub{ font-family: var(--mono); color: var(--teal); font-size: 14px; margin-top:8px; }
+  .hero-links{ display:flex; gap:16px; font-family: var(--mono); font-size:13px; flex-wrap:wrap; }
+  .hero-links a{ color: var(--text-dim); border-bottom:1px dashed var(--line); padding-bottom:2px; }
+  .hero-links a:hover{ color: var(--teal); border-color: var(--teal); text-decoration:none; }
+
+  .summary{
+    margin-top: 22px; max-width: 680px;
+    color: var(--text-dim); font-size: 15.5px;
+  }
+  .summary strong{ color: var(--text); font-weight:600; }
+
+  /* ---------- FLOW VISUAL (signature element) ---------- */
+  .flowcard{
+    margin-top: 30px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 18px 14px;
+  }
+  .flowcard .label{
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-dim);
+    display:flex; justify-content:space-between; margin-bottom: 10px; letter-spacing:0.04em; text-transform:uppercase;
+  }
+  .flowcard .label span:last-child{ color: var(--teal); }
+  #flowCanvas{ width:100%; height: 108px; display:block; }
+  .legend{ display:flex; gap:18px; margin-top: 8px; font-family: var(--mono); font-size:11.5px; color: var(--text-dim); }
+  .legend .sw{ display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; vertical-align:1px; }
+
+  /* ---------- SECTION SCAFFOLDING ---------- */
+  section{ padding: 54px 0; border-top: 1px solid var(--line); }
+  .eyebrow{
+    font-family: var(--mono); font-size: 12px; color: var(--teal);
+    letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 6px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:'//'; color: var(--text-dim); }
+  h2.stitle{ font-size: clamp(22px,3vw,28px); margin: 0 0 26px; font-weight:800; letter-spacing:-0.01em; }
+
+  /* ---------- PROJECTS AS INCIDENT REPORTS ---------- */
+  .report{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-bottom: 22px;
+    overflow:hidden;
+  }
+  .report-head{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .report-head h3{ margin:0 0 6px; font-size: 19px; font-weight:700; }
+  .report-head p{ margin:0; color: var(--text-dim); font-size: 14px; max-width: 520px; }
+  .sev{
+    font-family: var(--mono); font-size: 11px; letter-spacing:0.04em;
+    padding: 4px 10px; border-radius: 20px; white-space:nowrap;
+    border:1px solid var(--teal-dim); color: var(--teal); background: rgba(79,209,197,0.08);
+  }
+  .report-badges{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+  .repo-link{
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-dim);
+    border:1px solid var(--line); padding: 5px 10px; border-radius: 5px;
+    white-space:nowrap; display:inline-flex; align-items:center; gap:6px;
+  }
+  .repo-link:hover{ color: var(--teal); border-color: var(--teal-dim); text-decoration:none; background: rgba(79,209,197,0.06); }
+  .repo-link::before{ content:'⌥'; opacity:0.7; }
+  .report-body{ padding: 18px 22px 22px; }
+  .report-body ul{ margin:0 0 18px; padding-left: 18px; color: var(--text-dim); font-size: 14.5px; }
+  .report-body li{ margin-bottom: 9px; }
+  .report-body li::marker{ color: var(--teal); }
+  .metrics{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 18px; }
+  .metric{
+    font-family: var(--mono); background: var(--panel-2); border:1px solid var(--line);
+    border-radius:6px; padding: 8px 12px; min-width:92px;
+  }
+  .metric .v{ color: var(--teal); font-size: 17px; font-weight:600; display:block; }
+  .metric .k{ color: var(--text-dim); font-size: 10.5px; text-transform:uppercase; letter-spacing:0.04em; }
+  .stack{ display:flex; gap:8px; flex-wrap:wrap; }
+  .chip{
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-dim);
+    border:1px solid var(--line); padding: 4px 9px; border-radius: 5px;
+  }
+
+  /* ---------- CAPABILITY MATRIX ---------- */
+  .matrix{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 640px){ .matrix{ grid-template-columns: 1fr; } }
+  .mcat{
+    background: var(--panel); border:1px solid var(--line); border-radius:8px; padding: 18px 20px;
+  }
+  .mcat h4{
+    margin:0 0 12px; font-family: var(--mono); font-size:12px; color: var(--teal);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding-bottom:10px; border-bottom: 1px solid var(--line);
+  }
+  .mcat ul{ list-style:none; margin:0; padding:0; }
+  .mcat li{
+    font-size: 14px; color: var(--text-dim); padding: 6px 0;
+    display:flex; align-items:baseline; gap:8px;
+  }
+  .mcat li::before{ content:'▸'; color: var(--teal); font-size:11px; }
+
+  /* ---------- TIMELINE (education + certs) ---------- */
+  .log{ position:relative; padding-left: 26px; }
+  .log::before{ content:''; position:absolute; left:6px; top:4px; bottom:4px; width:1px; background: var(--line); }
+  .logrow{ position:relative; padding: 0 0 24px 18px; }
+  .logrow::before{ content:''; position:absolute; left:-25px; top:5px; width:9px; height:9px; border-radius:50%; background: var(--bg); border:2px solid var(--teal); }
+  .logrow:last-child{ padding-bottom:0; }
+  .logrow .ts{ font-family: var(--mono); font-size: 11.5px; color: var(--teal); margin-bottom:4px; }
+  .logrow h4{ margin:0 0 3px; font-size:15.5px; font-weight:700; }
+  .logrow .meta{ color: var(--text-dim); font-size: 13.5px; }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  .contact{ text-align:center; padding: 64px 0 28px; }
+  .contact .eyebrow{ justify-content:center; }
+  .contact .eyebrow::before{ content:none; }
+  .contact h2{ font-size: clamp(24px,4vw,36px); margin: 0 0 14px; font-weight:800; }
+  .contact p{ color: var(--text-dim); max-width: 480px; margin: 0 auto 28px; }
+  .prompt{
+    font-family: var(--mono); font-size: 14px;
+    background: var(--panel); border:1px solid var(--line); border-radius: 8px;
+    padding: 18px 22px; max-width: 460px; margin: 0 auto; text-align:left;
+  }
+  .prompt .row{ margin-bottom:9px; color: var(--text-dim); }
+  .prompt .row:last-child{ margin-bottom:0; }
+  .prompt .k{ color: var(--teal); }
+  footer{ text-align:center; padding: 24px 0 40px; font-family: var(--mono); font-size:11.5px; color: #4b5563; }
+</style>
+</head>
+<body>
+
+  <div class="statusbar">
+    <div class="wrap">
+      <span class="brand"><span class="dot"></span>chinthan@security:~$</span>
+      <nav>
+        <a href="#projects">projects</a>
+        <a href="#skills">skills</a>
+        <a href="#education">education</a>
+        <a href="#contact">contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="hero" style="border-top:none;">
+      <div class="terminal">
+        <div class="terminal-head">
+          <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
+          &nbsp;boot_sequence.log
+        </div>
+        <div class="terminal-body" id="bootLog"></div>
+      </div>
+
+      <div class="hero-role">
+        <div>
+          <h1>Chinthan B</h1>
+          <div class="sub">Cybersecurity Engineer — Threat Detection &amp; Applied ML</div>
+        </div>
+        <div class="hero-links">
+          <a href="mailto:chinthanbolumbu23@gmail.com">mail</a>
+          <a href="tel:+918431574389">+91&nbsp;84315&nbsp;74389</a>
+          <a href="https://www.linkedin.com/in/chinthanb/" target="_blank" rel="noopener">linkedin</a>
+          <a href="https://github.com/Chinthan07" target="_blank" rel="noopener">github</a>
+          <a href="https://www.x.com/ChinthanBolumbu" target="_blank" rel="noopener">x</a>
+        </div>
+      </div>
+
+      <p class="summary">Cybersecurity graduate (M.E., MSIS – MAHE Manipal) focused on <strong>network intrusion detection and applied machine learning</strong>. Builds classifiers that turn raw traffic and phishing signals into decisions — from flow-based feature engineering to production-facing detection apps — spanning offensive fundamentals, digital forensics, and threat intelligence.</p>
+
+      <div class="flowcard">
+        <div class="label"><span>live flow classifier — illustrative</span><span id="flowStat">RF · conf 0.00</span></div>
+        <canvas id="flowCanvas"></canvas>
+        <div class="legend">
+          <span><span class="sw" style="background:var(--teal)"></span>benign</span>
+          <span><span class="sw" style="background:var(--alert)"></span>flagged</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="eyebrow">case files</div>
+      <h2 class="stitle">Projects</h2>
+
+      <article class="report">
+        <div class="report-head">
+          <div>
+            <h3>IntelliGuard — AI-Powered Intrusion Detection System</h3>
+            <p>Capstone project. Classifies live-captured and offline network traffic as benign or malicious using a trained flow-based classifier.</p>
+          </div>
+          <div class="report-badges">
+            <span class="sev">RESOLVED</span>
+            <a class="repo-link" href="https://github.com/Chinthan07/AI-Powered_Intrusion_Detection_System" target="_blank" rel="noopener">view repo</a>
+          </div>
+        </div>
+        <div class="report-body">
+          <div class="metrics">
+            <div class="metric"><span class="v">95%</span><span class="k">accuracy</span></div>
+            <div class="metric"><span class="v">88.6%</span><span class="k">recall</span></div>
+            <div class="metric"><span class="v">21</span><span class="k">flow features</span></div>
+          </div>
+          <ul>
+            <li>Built a real-time packet-capture flow-tracking engine with Scapy, reconstructing 21 CICIDS2018-style flow features (duration, inter-arrival times, packet statistics) from live traffic, alongside an offline CSV detection path.</li>
+            <li>Trained and tuned a Random Forest classifier, reaching 95% accuracy and 88.6% recall on intrusion detection.</li>
+            <li>Designed a hybrid decision engine combining ML confidence thresholds with heuristic rules to reduce false negatives on borderline traffic.</li>
+            <li>Shipped a full Streamlit application for live and offline detection, with analytics dashboards and automated PDF report generation.</li>
+          </ul>
+          <div class="stack">
+            <span class="chip">Python</span><span class="chip">scikit-learn</span><span class="chip">Scapy</span><span class="chip">Streamlit</span><span class="chip">Random Forest</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="report">
+        <div class="report-head">
+          <div>
+            <h3>ML-Based Phishing Detection Platform</h3>
+            <p>Detects phishing URLs and emails by combining structural/lexical feature engineering with NLP, live threat intel, and log analysis.</p>
+          </div>
+          <div class="report-badges">
+            <span class="sev">RESOLVED</span>
+            <a class="repo-link" href="https://github.com/Chinthan07/Phishing_URL_and_Email_Analysis_using_NLP_and_Machine_Learning" target="_blank" rel="noopener">view repo</a>
+          </div>
+        </div>
+        <div class="report-body">
+          <div class="metrics">
+            <div class="metric"><span class="v">53</span><span class="k">URL features</span></div>
+            <div class="metric"><span class="v">2</span><span class="k">models trained</span></div>
+            <div class="metric"><span class="v">2</span><span class="k">live intel APIs</span></div>
+          </div>
+          <ul>
+            <li>Engineered 53 structural and lexical URL features, including Levenshtein-based brand-typosquatting detection, homoglyph normalization, and Shannon entropy scoring.</li>
+            <li>Trained a Random Forest classifier for URL detection and a TF-IDF + Logistic Regression model for email phishing classification.</li>
+            <li>Integrated live threat intelligence via the AbuseIPDB API and email security checks via the VirusTotal API.</li>
+            <li>Built an interactive Streamlit application for bulk CSV analysis, confidence-scored predictions, and log analysis.</li>
+          </ul>
+          <div class="stack">
+            <span class="chip">Python</span><span class="chip">scikit-learn</span><span class="chip">NLP / TF-IDF</span><span class="chip">AbuseIPDB API</span><span class="chip">VirusTotal API</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="report">
+        <div class="report-head">
+          <div>
+            <h3>Network Vulnerability Scanner</h3>
+            <p>Python-based scanner for discovering live hosts on a network and identifying vulnerabilities on them.</p>
+          </div>
+          <div class="report-badges">
+            <span class="sev">RESOLVED</span>
+            <a class="repo-link" href="https://github.com/Chinthan07/Network_Vulnerability_Scanner" target="_blank" rel="noopener">view repo</a>
+          </div>
+        </div>
+        <div class="report-body">
+          <ul>
+            <li>Performs host discovery and port scanning across a target network range.</li>
+            <li>Runs service and version detection on open ports to fingerprint running software.</li>
+            <li>Cross-references detected services and versions to identify known vulnerabilities.</li>
+            <li>Generates automated scan reports summarizing findings.</li>
+          </ul>
+          <div class="stack">
+            <span class="chip">Python</span><span class="chip">Host Discovery</span><span class="chip">Port Scanning</span><span class="chip">Vulnerability ID</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section id="skills">
+      <div class="eyebrow">capability matrix</div>
+      <h2 class="stitle">Skills</h2>
+      <div class="matrix">
+        <div class="mcat">
+          <h4>Languages &amp; ML</h4>
+          <ul>
+            <li>Python, scikit-learn, Pandas, NumPy</li>
+            <li>C++, SQL</li>
+            <li>Streamlit, Scapy</li>
+          </ul>
+        </div>
+        <div class="mcat">
+          <h4>Security Tools</h4>
+          <ul>
+            <li>Nmap, Wireshark</li>
+            <li>Splunk</li>
+            <li>Burp Suite, Metasploit</li>
+          </ul>
+        </div>
+        <div class="mcat">
+          <h4>Network Security</h4>
+          <ul>
+            <li>OSI Model, TCP/IP, UDP, ICMP, ARP</li>
+            <li>Subnetting, Routing, NAT</li>
+            <li>DNS, DHCP</li>
+          </ul>
+        </div>
+        <div class="mcat">
+          <h4>Environment</h4>
+          <ul>
+            <li>VS Code, Visual Studio</li>
+            <li>Jupyter Notebook, Google Colab</li>
+            <li>Git / GitHub</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="education">
+      <div class="eyebrow">activity log</div>
+      <h2 class="stitle">Education &amp; Certifications</h2>
+      <div class="log">
+        <div class="logrow">
+          <div class="ts">2024 — 2026</div>
+          <h4>M.E. in Cybersecurity</h4>
+          <div class="meta">Manipal School of Information Sciences (MSIS), MAHE Manipal · GPA 8.60</div>
+        </div>
+        <div class="logrow">
+          <div class="ts">2020 — 2024</div>
+          <h4>B.E. in Computer Science &amp; Engineering</h4>
+          <div class="meta">NMAM Institute of Technology · CGPA 7.81</div>
+        </div>
+        <div class="logrow">
+          <div class="ts">Dec 2025</div>
+          <h4>Bypass CTF — Unstop Competition</h4>
+          <div class="meta">Competitive capture-the-flag participant</div>
+        </div>
+        <div class="logrow">
+          <div class="ts">Feb 2025</div>
+          <h4>Google Cybersecurity Professional Certificate</h4>
+          <div class="meta">Coursera (Google)</div>
+        </div>
+        <div class="logrow">
+          <div class="ts">Sep 2024</div>
+          <h4>Cyber Analyst Job Simulation</h4>
+          <div class="meta">Forage (Tata Consultancy Services)</div>
+        </div>
+        <div class="logrow">
+          <div class="ts">Aug 2023</div>
+          <h4>Agile Methodology Job Simulation</h4>
+          <div class="meta">Forage (Cognizant)</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact" style="border-top: 1px solid var(--line);">
+      <div class="eyebrow">connect</div>
+      <h2>Let's talk security.</h2>
+      <p>Open to roles and collaborations in threat detection, SOC operations, and applied ML for security.</p>
+      <div class="prompt">
+        <div class="row"><span class="k">$</span> mail&nbsp; <a href="mailto:chinthanbolumbu23@gmail.com">chinthanbolumbu23@gmail.com</a></div>
+        <div class="row"><span class="k">$</span> call&nbsp; <a href="tel:+918431574389">+91 84315 74389</a></div>
+        <div class="row"><span class="k">$</span> linkedin&nbsp; <a href="https://www.linkedin.com/in/chinthanb/" target="_blank" rel="noopener">/in/chinthanb</a></div>
+        <div class="row"><span class="k">$</span> github&nbsp; <a href="https://github.com/Chinthan07" target="_blank" rel="noopener">/Chinthan07</a></div>
+        <div class="row"><span class="k">$</span> x&nbsp; <a href="https://www.x.com/ChinthanBolumbu" target="_blank" rel="noopener">@ChinthanBolumbu</a></div>
+        <div class="row"><span class="k">$</span> location&nbsp; Mangalore, Karnataka, IN</div>
+      </div>
+    </section>
+  </div>
+
+  <footer>&copy; 2026 Chinthan B — built with HTML, CSS &amp; a little too much Random Forest.</footer>
+
+<script>
+  // Boot log typing sequence
+  const lines = [
+    { text: '$ initializing profile...', cls: '' },
+    { text: '> loading identity: <span class="name">Chinthan B</span>', cls: '' },
+    { text: '> role: Cybersecurity Engineer, Threat Detection & Applied ML', cls: '' },
+    { text: '> status: <span class="ok">ACTIVE — open to opportunities</span>', cls: '' },
+  ];
+  const bootLog = document.getElementById('bootLog');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function typeLines(idx){
+    if(idx >= lines.length){
+      const c = document.createElement('span');
+      c.className = 'caret';
+      bootLog.appendChild(c);
+      return;
+    }
+    const p = document.createElement('div');
+    p.className = 'line';
+    bootLog.appendChild(p);
+    const full = lines[idx].text;
+    if(reduced){ p.innerHTML = full; typeLines(idx+1); return; }
+    let i = 0;
+    const plain = full.replace(/<[^>]+>/g,'');
+    const useHTML = full !== plain;
+    function step(){
+      if(useHTML){ p.innerHTML = full; typeLines(idx+1); return; } // render rich lines instantly after prior plain lines typed
+      i++;
+      p.textContent = plain.slice(0,i);
+      if(i < plain.length){ setTimeout(step, 14); }
+      else { setTimeout(()=>typeLines(idx+1), 180); }
+    }
+    step();
+  }
+  typeLines(0);
+
+  // Signature element: animated flow classifier
+  const canvas = document.getElementById('flowCanvas');
+  const ctx = canvas.getContext('2d');
+  const statEl = document.getElementById('flowStat');
+  let W, H, dpr;
+
+  function resize(){
+    dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const lanes = 3;
+  const packets = [];
+  function spawn(){
+    const lane = Math.floor(Math.random()*lanes);
+    const malicious = Math.random() < 0.22;
+    packets.push({
+      x: -10,
+      y: (H/(lanes+1)) * (lane+1),
+      speed: 0.6 + Math.random()*0.5,
+      malicious,
+      flagged: false,
+      conf: 0
+    });
+  }
+  for(let i=0;i<5;i++){ setTimeout(spawn, i*300); }
+  setInterval(spawn, 900);
+
+  const teal = getComputedStyle(document.documentElement).getPropertyValue('--teal').trim();
+  const alert = getComputedStyle(document.documentElement).getPropertyValue('--alert').trim();
+  const line = getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // lane guides
+    ctx.strokeStyle = line; ctx.lineWidth = 1;
+    for(let l=1; l<=lanes; l++){
+      const y = (H/(lanes+1))*l;
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    }
+    const decisionX = W*0.68;
+    ctx.strokeStyle = 'rgba(79,209,197,0.25)';
+    ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(decisionX,0); ctx.lineTo(decisionX,H); ctx.stroke();
+    ctx.setLineDash([]);
+
+    let liveConf = 0, liveCount = 0;
+
+    for(let i = packets.length-1; i>=0; i--){
+      const p = packets[i];
+      p.x += p.speed;
+      if(p.x > decisionX && !p.flagged){
+        p.flagged = true;
+        p.conf = p.malicious ? (0.8 + Math.random()*0.19) : (0.05 + Math.random()*0.2);
+      }
+      const color = p.flagged ? (p.malicious ? alert : teal) : '#5b6b7a';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4, 0, Math.PI*2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      if(p.flagged){
+        liveConf = p.conf; liveCount++;
+      }
+      if(p.x > W+10) packets.splice(i,1);
+    }
+    if(liveCount>0){ statEl.textContent = 'RF · conf ' + liveConf.toFixed(2); }
+    if(!reduced){ requestAnimationFrame(draw); }
+  }
+  if(reduced){
+    // static single frame for reduced motion
+    ctx.strokeStyle = line;
+    for(let l=1; l<=lanes; l++){ const y=(H/(lanes+1))*l; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    statEl.textContent = 'RF · conf 0.91';
+  } else {
+    draw();
+  }
+</script>
+</body>
+</html>
